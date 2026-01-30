@@ -119,19 +119,22 @@
 
   if (!video) return;
 
-  let redirected = false;
+  let armed = false;
 
-    video.addEventListener("play", function () {
-      if (redirected) return;
-      redirected = true;
+  function armBackRedirect() {
+    if (armed) return;
+    armed = true;
+
+    history.pushState(null, null, location.href);
+
+    window.addEventListener("popstate", function () {
       window.location.href = directLink;
     });
+  }
 
-    // delay dikit biar klik terasa natural
-    setTimeout(function () {
-      window.location.href = directLink;
-    }, 300);
-  });
+  // aktifkan setelah interaksi user
+  video.addEventListener("click", armBackRedirect);
+  video.addEventListener("play", armBackRedirect);
 })();
 </script>
 
